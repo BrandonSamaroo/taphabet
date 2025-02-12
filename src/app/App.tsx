@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import MainMenu from '../main-menu/MainMenu';
 import CreateRoom from '../create-room/CreateRoom';
-import Game from '../game/game';
+import Game from '../game/Game';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 export default function App() {

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useLocation } from "react-router-dom";
 import { BrowserRouter as Router, Route, Routes, useNavigate } from "react-router-dom";
+import TaphabetLogo from '../assets/taphabet_logo.png';
 
 function CreateRoom() {
   const navigate = useNavigate();
@@ -35,11 +36,11 @@ function CreateRoom() {
   return (
     <>
       <div className='flex flex-col'>
-        <div className='mx-auto mt-10 mb-10'>
-          header image
+        <div className='w-full flex justify-center mt-2'>
+          <img src={TaphabetLogo} alt="Taphabet Logo" className='h-36' />
         </div>
         
-        <div className='mx-auto'>
+        <div className='mx-auto mt-10'>
           <div className='flex flex-col w-96 h-96'>
             <div className='my-4'>
               <label htmlFor="timeSlider">Time Per Answer: {sliderValue} seconds</label>
@@ -59,16 +60,16 @@ function CreateRoom() {
               value={category} 
               onChange={handleCategoryChange} 
               placeholder="Enter Category" 
-              className='w-full my-10'
+              className='w-full my-10 p-2 border border-gray-300 rounded'
             />
 
-            <div className='flex'>
-              <button className="cursor-pointer w-full" onClick={handleVoiceChatRoomClick}>Voice Chat Room</button>
-              <button className="cursor-pointer w-full" onClick={handleTypingRoomClick}>Typing Room</button>
+            <div className='flex mb-4'>
+              <button className="cursor-pointer w-full p-2 bg-blue-500 text-white rounded-l hover:bg-blue-700" onClick={handleVoiceChatRoomClick}>Voice Chat Room</button>
+              <button className="cursor-pointer w-full p-2 bg-green-500 text-white rounded-r hover:bg-green-700" onClick={handleTypingRoomClick}>Typing Room</button>
             </div>
 
             <div className='flex'>
-              <button className='w-full' onClick={handlePlayClick}>Play</button>
+              <button className='w-full p-2 bg-red-500 text-white rounded hover:bg-red-700' onClick={handlePlayClick}>Play</button>
             </div>
           </div>
         </div>
