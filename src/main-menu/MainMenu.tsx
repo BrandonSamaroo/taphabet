@@ -6,22 +6,21 @@ function MainMenu() {
   const navigate = useNavigate();
 
   const [userName, setUserName] = useState("");
+  const [roomCode, setRoomCode] = useState("");
 
   const handleUserNameChange = (event: any) => {
     setUserName(event.target.value);
   };
 
-  const [roomCode, setRoomCode] = useState("");
-
   const handleRoomCodeChange = (event: any) => {
     setRoomCode(event.target.value);
   };
 
-  const handleJoinRoomClick = (event: any) => {
-    navigate(`/play/${roomCode}`, { state: { userName: userName, role: "user" } });
+  const handleJoinRoomClick = () => {
+    navigate(`/play/${roomCode}`, { state: { userName: userName } });
   };
 
-  const handleCreateRoomClick = (event: any) => {
+  const handleCreateRoomClick = () => {
     navigate("/create-room", { state: { userName: userName } });
   }
 
@@ -51,7 +50,7 @@ function MainMenu() {
                 className='w-full p-2 border border-gray-300 rounded-l'
               />
               <button 
-                className='w-full p-2 bg-blue-500 text-white rounded-r hover:bg-blue-700' 
+                className={`w-full p-2 ${roomCode === "" ? 'bg-gray-500 text-white cursor-not-allowed' : 'bg-blue-500 text-white cursor-pointer hover:bg-blue-700'} rounded-r`} 
                 onClick={handleJoinRoomClick}
                 disabled={roomCode === ""}
               >

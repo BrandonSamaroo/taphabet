@@ -1,66 +1,48 @@
 import { useState, useEffect } from 'react'
-import { useParams, useLocation } from "react-router-dom";
-import { BrowserRouter as Router, Route, Routes, useNavigate } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import TaphabetLogo from '../assets/taphabet_logo.png';
+import useWebSocket from '../hooks/useWebSocket';
 
 function Game() {
   const navigate = useNavigate();
-
+  const { roomId } = useParams<string>();
   const location = useLocation();
-  const userName = location.state?.userName || "User";
-  const timerPerAnswer = location.state?.timerPerAnswer || 15;
-  const category = location.state?.category || "General";
+  const timerPerAnswer: number = location.state?.timerPerAnswer || 15;
 
-  const { roomId } = useParams(); 
-  const [currentUser, setCurrentUser] = useState(userName);
-  
-  const lobbyType = location.state?.lobbyType || "Voice"
-  const role = location.state?.role || "user";
-  const roomCode = location.state?.roomCode || null;
+  const { 
+    isConnected,
+    messages, sendMessage,
+    lettersPressed, sendLetter, setLettersPressed,
+    users, addUser, 
+    timeLeft, setTimeLeft
+   } = useWebSocket(roomId, timerPerAnswer);
 
-  const [gameState, setGameState] = useState("");
-  const [users, setUsers] = useState(["brandon", "drishti"]);
+   const lobbyType: string = location.state?.lobbyType || "Voice";
+   const userName: string = location.state?.userName || `Guest ${users.length}`
+   const category: string = location.state?.category || "General";
+ 
 
-  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
-
-  const [messages, setMessages] = useState<string[]>([]);
   const [message, setMessage] = useState("");
+  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
   const [isGameOver, setIsGameOver] = useState(false);
 
-  const handleSendMessage = () => {
-    if (message.trim()) {
-      setMessages([...messages, `${currentUser}: ${message}`]);
-      setMessage("");
+  useEffect(() => {
+    if (isConnected) {
+      addUser(userName);
     }
-  };
-
-  const [timeLeft, setTimeLeft] = useState(60);
-  const [clickedLetters, setClickedLetters] = useState<string[]>([]);
+  }, [isConnected]);
 
   useEffect(() => {
-    setTimeLeft(timerPerAnswer);
-  }, [timerPerAnswer]);
-
-  useEffect(() => {
-    if (timeLeft > 0) {
-      const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
-      return () => clearTimeout(timer);
-    } else {
+    if (timeLeft === 0) {
       setIsGameOver(true);
     }
   }, [timeLeft]);
 
-  const handleLetterClick = (letter: string) => {
-    console.log(`Clicked letter: ${letter}`);
-    setTimeLeft(timerPerAnswer);
-    setClickedLetters([...clickedLetters, letter]);
-  };
-
   const handleResetGame = () => {
     setIsGameOver(false);
     setTimeLeft(timerPerAnswer);
-    setClickedLetters([]);
+    setLettersPressed([]);
     navigate("/create-room", { state: { userName: userName, timerPerAnswer: timerPerAnswer, oldLobbyType: lobbyType, oldCategory: category } });
   };
 
@@ -88,9 +70,9 @@ function Game() {
               {alphabet.map((letter) => (
                 <button
                   key={letter}
-                  onClick={() => handleLetterClick(letter)}
-                  className={`border p-2 rounded ${clickedLetters.includes(letter) ? 'bg-gray-400' : 'hover:bg-gray-200'}`}
-                  disabled={clickedLetters.includes(letter) || isGameOver}
+                  onClick={() => sendLetter(letter)}
+                  className={`border p-2 rounded ${lettersPressed.includes(letter) ? 'bg-gray-400' : 'hover:bg-gray-200'}`}
+                  disabled={lettersPressed.includes(letter) || isGameOver}
                 >
                   {letter}
                 </button>
@@ -116,7 +98,7 @@ function Game() {
               className="border p-2 w-full mt-2 rounded"
               disabled={isGameOver}
             />
-            <button onClick={handleSendMessage} disabled={isGameOver} className="border p-2 mt-2 bg-blue-500 text-white rounded hover:bg-blue-700">
+            <button onClick={() => sendMessage(message)} disabled={isGameOver} className="border p-2 mt-2 bg-blue-500 text-white rounded hover:bg-blue-700">
               Send
             </button>
           </div>
