@@ -7,18 +7,46 @@ function CreateRoom() {
   const navigate = useNavigate();
 
   const location = useLocation();
-  const userName = location.state?.userName || "User";
-  const timerPerAnswer = location.state?.timerPerAnswer || 15;
+  const generateRandomName = () => `User${Math.floor(Math.random() * 10000)}`;
+  const userName = location.state?.userName || generateRandomName();
+  const timerPerAnswer = location.state?.timerPerAnswer || 9000;
   const oldCategory = location.state?.oldCategory || "";
   const oldLobbyType = location.state?.oldLobbyType || "";
 
   const [lobbyType, setLobbyType] = useState(oldLobbyType);
-  const [roomCode, setRoomCode] = useState("xyz");
   const [category, setCategory] = useState(oldCategory);
   const [sliderValue, setSliderValue] = useState(timerPerAnswer);
 
-  const handlePlayClick = (event: any) => {
-    navigate(`/play/${roomCode}`, { state: { userName: userName, role: "admin", lobbyType: lobbyType, timerPerAnswer: sliderValue, category: category } });
+  const handleCreateClick = async (event: any) => {
+    const gameRoom = await createGameRoom();
+    if (gameRoom) {
+      navigate(`/play/${gameRoom.room_code}`, { state: { userName: userName, lobbyType: lobbyType, timerPerAnswer: sliderValue, category: category } });
+    }
+  };
+
+  const createGameRoom = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/game_rooms", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          host_name: userName,
+          category: category,
+          users: [userName],
+          time_left: sliderValue,
+          room_type: "Manual"
+        }),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to create game room");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
   };
 
   const handleTypingRoomClick = (event: any) => {
@@ -69,7 +97,7 @@ function CreateRoom() {
             </div>
 
             <div className='flex'>
-              <button className='w-full p-2 bg-red-500 text-white rounded hover:bg-red-700' onClick={handlePlayClick}>Play</button>
+              <button className='w-full p-2 bg-red-500 text-white rounded hover:bg-red-700' onClick={handleCreateClick}>Create Room</button>
             </div>
           </div>
         </div>

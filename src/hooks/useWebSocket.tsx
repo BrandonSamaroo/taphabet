@@ -23,6 +23,18 @@ const useWebSocket = (roomCode: undefined | string, timerPerAnswer: number) => {
           setIsConnected(false);
         },
         received: (data) => {
+          if (data.messages) {
+            setMessages(data.messages);
+          }
+          if (data.letters_pressed) {
+            setLettersPressed(data.letters_pressed);
+          }
+          if (data.users) {
+            setUsers(data.users);
+          }
+          if (data.time_left) {
+            setTimeLeft(data.time_left);
+          }
           if (data.message) {
             setMessages((prev) => [...prev, data.message]);
           }
