@@ -1,4 +1,4 @@
-# Tapple Clone FrontEnd
+# Taphabet Front End
 
 ## Intro
 
