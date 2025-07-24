@@ -1,50 +1,30 @@
-# React + TypeScript + Vite
+Tapple Clone FrontEnd
+Intro
+A digital reimagining of the classic board game Tapple, brought to life with a modern web stack. This version delivers a fast-paced, competitive multiplayer experience enhanced by real-time communication and AI-powered answer validation.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<br>
+Screenshots
+Homepage
 
-Currently, two official plugins are available:
+Game Lobby
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Gameplay
 
-## Expanding the ESLint configuration
+AI Answer Validation
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+<br>
+Technologies Used
+This project is powered by a modern stack including:
 
-- Configure the top-level `parserOptions` property like this:
+React, Vite, TypeScript, TailwindCSS
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+WebSockets for real-time communication
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+Ruby on Rails backend for core game logic and matchmaking
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+OpenAI API for dynamic, AI-driven answer verification
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+PostgreSQL for data persistence
+
+Getting Started
+To try the game live, <a href="#" target="_blank">click here!</a>
