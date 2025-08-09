@@ -16,7 +16,7 @@ const useWebSocket = (roomId: undefined | string, sessionUser: any) => {
   const [sessionUsers, setSessionUsers] = useState([]);
   const [timeLeft, setTimeLeft] = useState(60);
   const [error, setError] = useState("")
-  const [messages, setMessages] = useState<string[]>([]);
+  const [messages, setMessages] = useState([]);
   const [gameRoomId, setGameRoomId] = useState(0)
 
   const [cable, setCable] = useState<ReturnType<typeof createConsumer>["subscriptions"]["subscriptions"][0] | null>(null);
@@ -41,7 +41,6 @@ const useWebSocket = (roomId: undefined | string, sessionUser: any) => {
           setFailedToConnect(true);
         },
         received: (data) => {
-          console.log(roomId, data)
           if (data.error) {
             setFailedToConnect(true);
             setError(data.error);
